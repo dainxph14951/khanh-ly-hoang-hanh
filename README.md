@@ -1,4 +1,4 @@
-# Thiệp Khánh Ly & Hoàng Hạnh
+# Thiệp Khánh Ly & Hoàng Hanh
 
 Thiệp mới tông đỏ rượu vang, nền giấy kem, hoa nét mảnh. Có modal mở thiệp với hai cánh trượt sang hai bên và chữ hiện dần theo từng phần khi cuộn. Hiệu ứng được giảm khi thiết bị bật chế độ giảm chuyển động. Dùng lại font có sẵn từ `duc-huyen-wedding`. Nội dung theo hai ảnh thiệp giấy; không cần cài thư viện, không phụ thuộc API hoặc CDN.
 
