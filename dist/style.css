@@ -11,6 +11,7 @@
 
 /* Thiệp mở bằng hai cánh cửa, phủ lên trang cho đến khi khách chạm mở. */
 body.invitation-locked{overflow:hidden}
+html.auto-scrolling{scroll-behavior:auto}
 .opening-modal{position:fixed;inset:0;width:100%;height:100%;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;color:var(--cream);overflow:hidden;overscroll-behavior:contain}
 .opening-modal::backdrop{background:transparent}
 .opening-modal[open]{display:grid;place-items:center}

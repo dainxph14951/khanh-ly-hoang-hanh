@@ -44,6 +44,54 @@ function revealText() {
   });
 }
 
+function startAutoScroll() {
+  if (reduceMotion.matches || document.hidden) return;
+
+  const controller = new AbortController();
+  const { signal } = controller;
+  let frame = 0;
+  let previousTime;
+  let position = window.scrollY;
+  const stop = () => {
+    window.clearTimeout(delay);
+    window.cancelAnimationFrame(frame);
+    document.documentElement.classList.remove('auto-scrolling');
+    controller.abort();
+  };
+  const step = time => {
+    const bottom = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    if (position >= bottom) {
+      stop();
+      return;
+    }
+    if (previousTime !== undefined) {
+      // Keep a steady reading pace without jumping after a delayed frame.
+      position = Math.min(bottom, position + Math.min(time - previousTime, 100) * 0.028);
+      window.scrollTo(0, position);
+    }
+    previousTime = time;
+    frame = window.requestAnimationFrame(step);
+  };
+  const delay = window.setTimeout(() => {
+    position = window.scrollY;
+    document.documentElement.classList.add('auto-scrolling');
+    frame = window.requestAnimationFrame(step);
+  }, 2500);
+
+  ['pointerdown', 'touchstart', 'wheel'].forEach(type => {
+    window.addEventListener(type, stop, { passive: true, signal });
+  });
+  window.addEventListener('keydown', event => {
+    if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' ', 'Tab', 'Escape'].includes(event.key)) stop();
+  }, { signal });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+  }, { signal });
+  reduceMotion.addEventListener('change', event => {
+    if (event.matches) stop();
+  }, { signal });
+}
+
 let opening = false;
 function openInvitation() {
   if (opening) return;
@@ -56,6 +104,7 @@ function openInvitation() {
     document.body.classList.remove('invitation-locked');
     revealText();
     document.querySelector('.open-invitation').focus({ preventScroll: true });
+    startAutoScroll();
   };
   if (reduceMotion.matches) {
     finishOpening();
